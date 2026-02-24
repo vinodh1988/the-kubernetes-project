@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-website-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-app-website
+  template:
+    metadata:
+      labels:
+        app: node-app-website
+    spec:
+      containers:
+        - name: node-app-website
+          image: vinodhconnects/node-app-website
+          ports:
+            - containerPort: 3000
+          env:
+            - name: APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: node-app-website-config
+                  key: APP_NAME
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: node-app-website-config
+                  key: APP_ENV
+            - name: APP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: node-app-website-config
+                  key: APP_PORT
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: node-app-website-config
+                  key: LOG_LEVEL
+            - name: FEATURE_FLAG
+              valueFrom:
+                configMapKeyRef:
+                  name: node-app-website-config
+                  key: FEATURE_FLAG
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: node-app-website-secret
+                  key: DB_HOST
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: node-app-website-secret
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: node-app-website-secret
+                  key: DB_PASSWORD
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: node-app-website-secret
+                  key: API_KEY

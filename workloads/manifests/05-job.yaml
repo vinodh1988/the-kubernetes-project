@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: one-time-writer
+  namespace: workloads
+spec:
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 600
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: writer
+          image: workloads-writer:1.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MODE
+              value: once
+            - name: PREFIX
+              value: job
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+            - name: shared
+              mountPath: /data/shared
+      volumes:
+        - name: shared
+          persistentVolumeClaim:
+            claimName: workloads-shared-pvc

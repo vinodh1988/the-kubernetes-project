@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-app-website-config
+data:
+  APP_NAME: node-app-website
+  APP_ENV: production
+  APP_PORT: "3000"
+  LOG_LEVEL: info
+  FEATURE_FLAG: "true"

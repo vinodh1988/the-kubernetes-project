@@ -46,3 +46,39 @@ kubectl get deploy,svc,ingress
 ```
 
 If you are using NGINX Ingress Controller, ensure it is installed and running before applying `ingress.yaml`.
+
+## Connect Ingress Controller to MetalLB (`first-pool`)
+
+`Ingress` objects do not get external IPs directly. The external IP is assigned to the ingress controller Service (`ingress-nginx-controller`).
+
+Patch ingress controller service to `LoadBalancer`:
+
+```bash
+kubectl patch svc ingress-nginx-controller -n ingress-nginx -p "{\"spec\":{\"type\":\"LoadBalancer\"}}"
+```
+
+Attach the controller Service to MetalLB pool `first-pool`:
+
+```bash
+kubectl annotate svc ingress-nginx-controller -n ingress-nginx metallb.universe.tf/address-pool=first-pool --overwrite
+```
+
+Optional: request a fixed external IP from your pool (example):
+
+```bash
+kubectl patch svc ingress-nginx-controller -n ingress-nginx -p "{\"spec\":{\"loadBalancerIP\":\"192.168.49.110\"}}"
+```
+
+Check external IP assignment:
+
+```bash
+kubectl get svc -n ingress-nginx
+```
+
+Test routes:
+
+```bash
+curl http://<EXTERNAL-IP>/nginx
+curl http://<EXTERNAL-IP>/apache
+curl http://<EXTERNAL-IP>/node
+```

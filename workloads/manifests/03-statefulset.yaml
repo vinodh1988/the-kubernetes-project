@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: stateful-writer
+  namespace: workloads
+spec:
+  serviceName: stateful-writer-headless
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stateful-writer
+  template:
+    metadata:
+      labels:
+        app: stateful-writer
+    spec:
+      containers:
+        - name: writer
+          image: workloads-writer:1.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MODE
+              value: loop
+            - name: PREFIX
+              value: statefulset
+            - name: INTERVAL_SECONDS
+              value: "12"
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+            - name: shared
+              mountPath: /data/shared
+      volumes:
+        - name: shared
+          persistentVolumeClaim:
+            claimName: workloads-shared-pvc

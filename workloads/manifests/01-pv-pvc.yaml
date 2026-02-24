@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: workloads-shared-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  storageClassName: workloads-manual
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /tmp/workloads-shared
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: workloads-shared-pvc
+  namespace: workloads
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: workloads-manual
+  resources:
+    requests:
+      storage: 1Gi
