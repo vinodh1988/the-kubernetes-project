@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-website-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-app-website
+  template:
+    metadata:
+      labels:
+        app: node-app-website
+    spec:
+      containers:
+        - name: node-app-website
+          image: vinodhconnects/node-app-website
+          ports:
+            - containerPort: 3000
