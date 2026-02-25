@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpa-web
+  namespace: hpa-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hpa-web
+  template:
+    metadata:
+      labels:
+        app: hpa-web
+    spec:
+      containers:
+        - name: web
+          image: registry.k8s.io/hpa-example
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa-web-svc
+  namespace: hpa-demo
+spec:
+  selector:
+    app: hpa-web
+  ports:
+    - port: 80
+      targetPort: 80

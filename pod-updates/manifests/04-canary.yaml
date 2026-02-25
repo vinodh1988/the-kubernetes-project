@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: canary-web-stable
+  namespace: pod-updates
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: canary-web
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: canary-web
+        track: stable
+    spec:
+      containers:
+        - name: web
+          image: nginx:1.27
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: canary-web-canary
+  namespace: pod-updates
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: canary-web
+      track: canary
+  template:
+    metadata:
+      labels:
+        app: canary-web
+        track: canary
+    spec:
+      containers:
+        - name: web
+          image: nginx:1.28
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: canary-web-svc
+  namespace: pod-updates
+spec:
+  selector:
+    app: canary-web
+  ports:
+    - port: 80
+      targetPort: 80

@@ -33,7 +33,7 @@ workloads/
 
 ## Scenario design
 
-All workloads run the same small custom image (`workloads-writer:1.0`).
+All workloads run the same small custom image (`vinodhconnects/shared-writer:latest`).
 
 Each pod writes log lines into:
 - `/data/shared/activity.log` (combined log)
@@ -63,7 +63,7 @@ From repo root:
 
 ```bash
 cd workloads/container
-docker build -t workloads-writer:1.0 .
+docker build -t vinodhconnects/shared-writer:latest .
 ```
 
 ### If using Minikube
@@ -72,21 +72,21 @@ Option A (build directly inside Minikube Docker):
 
 ```bash
 eval $(minikube docker-env)
-docker build -t workloads-writer:1.0 .
+docker build -t vinodhconnects/shared-writer:latest .
 ```
 
 Option B (build locally, then load):
 
 ```bash
-docker build -t workloads-writer:1.0 .
-minikube image load workloads-writer:1.0
+docker build -t vinodhconnects/shared-writer:latest .
+minikube image load vinodhconnects/shared-writer:latest
 ```
 
 ### If using KIND
 
 ```bash
-docker build -t workloads-writer:1.0 .
-kind load docker-image workloads-writer:1.0
+docker build -t vinodhconnects/shared-writer:latest .
+kind load docker-image vinodhconnects/shared-writer:latest
 ```
 
 ---

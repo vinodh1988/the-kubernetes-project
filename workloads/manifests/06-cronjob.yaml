@@ -15,7 +15,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: writer
-              image: workloads-writer:1.0
+              image: vinodhconnects/shared-writer:latest
               imagePullPolicy: IfNotPresent
               env:
                 - name: MODE
