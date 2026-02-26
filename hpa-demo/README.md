@@ -49,6 +49,46 @@ kubectl top pods -A
 
 If these commands fail, install metrics-server first (method depends on your cluster distro).
 
+### If metrics-server is not running (HPA shows `unknown` metrics)
+
+Check current status:
+
+```bash
+kubectl get apiservice v1beta1.metrics.k8s.io
+kubectl -n kube-system get deploy,pods | findstr metrics-server
+```
+
+Install metrics-server (upstream manifest):
+
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+
+For local/lab clusters (KIND, some Minikube setups), kubelet cert validation can block metrics collection.
+Add these args to `metrics-server` deployment if logs show TLS / x509 / scrape errors:
+
+```bash
+kubectl -n kube-system edit deployment metrics-server
+```
+
+Under `spec.template.spec.containers[0].args`, ensure these flags exist:
+
+```text
+--kubelet-insecure-tls
+--kubelet-preferred-address-types=InternalIP,Hostname,ExternalIP
+```
+
+Wait for rollout and verify:
+
+```bash
+kubectl -n kube-system rollout status deploy/metrics-server
+kubectl get apiservice v1beta1.metrics.k8s.io
+kubectl top nodes
+kubectl top pods -A
+```
+
+If `kubectl top` works, HPA should start receiving metrics within ~30-90 seconds.
+
 ---
 
 ## Step 1: Deploy app + HPA

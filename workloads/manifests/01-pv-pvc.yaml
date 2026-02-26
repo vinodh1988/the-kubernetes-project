@@ -11,6 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /tmp/workloads-shared
+    type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
