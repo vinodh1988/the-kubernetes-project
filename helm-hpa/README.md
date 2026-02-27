@@ -18,14 +18,14 @@ Helm version of the previous `hpa-demo` project.
 ## Install
 
 ```bash
-helm upgrade --install helm-hpa ./helm-hpa -n hpa-demo --create-namespace
+helm upgrade --install helm-hpa ./helm-hpa -n helm-hpa --create-namespace
 ```
 
 ## Verify
 
 ```bash
-kubectl get deploy,hpa,pods -n hpa-demo
-kubectl describe hpa hpa-web -n hpa-demo
+kubectl get deploy,hpa,pods -n helm-hpa
+kubectl describe hpa hpa-web -n helm-hpa
 ```
 
 ## Start load (scale up)
@@ -33,14 +33,14 @@ kubectl describe hpa hpa-web -n hpa-demo
 Enable load generator:
 
 ```bash
-helm upgrade --install helm-hpa ./helm-hpa -n hpa-demo --set loadGenerator.enabled=true
+helm upgrade --install helm-hpa ./helm-hpa -n helm-hpa --set loadGenerator.enabled=true
 ```
 
 Watch:
 
 ```bash
-kubectl get hpa hpa-web -n hpa-demo -w
-kubectl get deploy hpa-web -n hpa-demo -w
+kubectl get hpa hpa-web -n helm-hpa -w
+kubectl get deploy hpa-web -n helm-hpa -w
 ```
 
 ## Stop load (scale down)
@@ -48,12 +48,12 @@ kubectl get deploy hpa-web -n hpa-demo -w
 Disable load generator:
 
 ```bash
-helm upgrade --install helm-hpa ./helm-hpa -n hpa-demo --set loadGenerator.enabled=false
+helm upgrade --install helm-hpa ./helm-hpa -n helm-hpa --set loadGenerator.enabled=false
 ```
 
 ## Uninstall
 
 ```bash
-helm uninstall helm-hpa -n hpa-demo
-kubectl delete ns hpa-demo --ignore-not-found=true
+helm uninstall helm-hpa -n helm-hpa
+kubectl delete ns helm-hpa --ignore-not-found=true
 ```
