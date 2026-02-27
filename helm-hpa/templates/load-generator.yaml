@@ -1,0 +1,28 @@
+{{- if .Values.loadGenerator.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.names.loadGenerator }}
+  labels:
+    {{- include "helm-hpa.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.names.loadGenerator }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.names.loadGenerator }}
+    spec:
+      containers:
+        - name: load-generator
+          image: "{{ .Values.loadGenerator.image.repository }}:{{ .Values.loadGenerator.image.tag }}"
+          imagePullPolicy: {{ .Values.loadGenerator.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              while true; do
+                wget -q -O- http://{{ .Values.names.service }}.{{ .Release.Namespace }}.svc.cluster.local > /dev/null
+              done
+{{- end }}

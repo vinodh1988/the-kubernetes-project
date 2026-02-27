@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: kustomize-demo
+data:
+  APP_TITLE: "Kustomize E2E Demo"
+  APP_MESSAGE: "Hello from base configuration"
