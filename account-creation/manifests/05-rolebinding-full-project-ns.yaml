@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: account-creation-full-access-binding
+  namespace: account-creation
+subjects:
+  - kind: ServiceAccount
+    name: account-creation-user
+    namespace: account-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: account-creation-full-access
