@@ -6,6 +6,22 @@ It does **not** automatically create a standalone kubeconfig file for client use
 
 Use the commands below to generate kubeconfig automatically.
 
+## Linux quick path (recommended for you)
+
+Use only the following commands on Linux:
+
+```bash
+kubectl config view --raw --minify --flatten > account-creation-user.kubeconfig
+TOKEN=$(kubectl -n account-creation create token account-creation-user)
+
+kubectl --kubeconfig=account-creation-user.kubeconfig config set-credentials account-creation-user --token="$TOKEN"
+kubectl --kubeconfig=account-creation-user.kubeconfig config set-context --current --user=account-creation-user --namespace=account-creation
+
+kubectl --kubeconfig=account-creation-user.kubeconfig get pods -A
+kubectl --kubeconfig=account-creation-user.kubeconfig auth can-i create deployment -n default
+kubectl --kubeconfig=account-creation-user.kubeconfig auth can-i create deployment -n account-creation
+```
+
 ## Prerequisites
 
 - Namespace: `account-creation`
@@ -14,42 +30,38 @@ Use the commands below to generate kubeconfig automatically.
 
 ## Auto-generate kubeconfig (Linux/macOS/Git Bash)
 
+Run only this section in Bash/Git Bash (do not run Windows CMD commands here).
+
 ```bash
+kubectl config view --raw --minify --flatten > account-creation-user.kubeconfig
 TOKEN=$(kubectl -n account-creation create token account-creation-user)
-SERVER=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-CA=$(kubectl config view --raw --minify -o jsonpath='{.clusters[0].cluster.certificate-authority-data}')
 
-kubectl config set-cluster target-cluster \
-  --server="$SERVER" \
-  --certificate-authority-data="$CA" \
-  --kubeconfig=account-creation-user.kubeconfig
+kubectl --kubeconfig=account-creation-user.kubeconfig config set-credentials account-creation-user --token="$TOKEN"
 
-kubectl config set-credentials account-creation-user \
-  --token="$TOKEN" \
-  --kubeconfig=account-creation-user.kubeconfig
-
-kubectl config set-context account-creation-user@target-cluster \
-  --cluster=target-cluster \
+kubectl --kubeconfig=account-creation-user.kubeconfig config set-context --current \
   --user=account-creation-user \
-  --namespace=account-creation \
-  --kubeconfig=account-creation-user.kubeconfig
-
-kubectl config use-context account-creation-user@target-cluster \
-  --kubeconfig=account-creation-user.kubeconfig
+  --namespace=account-creation
 ```
 
 ## Auto-generate kubeconfig (Windows CMD)
 
-```cmd
-for /f "delims=" %i in ('kubectl -n account-creation create token account-creation-user') do set TOKEN=%i
-for /f "delims=" %i in ('kubectl config view --minify -o jsonpath="{.clusters[0].cluster.server}"') do set SERVER=%i
-for /f "delims=" %i in ('kubectl config view --raw --minify -o jsonpath="{.clusters[0].cluster.certificate-authority-data}"') do set CA=%i
+Skip this section if you are on Linux.
 
-kubectl config set-cluster target-cluster --server="%SERVER%" --certificate-authority-data="%CA%" --kubeconfig=account-creation-user.kubeconfig
-kubectl config set-credentials account-creation-user --token="%TOKEN%" --kubeconfig=account-creation-user.kubeconfig
-kubectl config set-context account-creation-user@target-cluster --cluster=target-cluster --user=account-creation-user --namespace=account-creation --kubeconfig=account-creation-user.kubeconfig
-kubectl config use-context account-creation-user@target-cluster --kubeconfig=account-creation-user.kubeconfig
+Run only this section in `cmd.exe` (do not run Bash commands here).
+
+```cmd
+kubectl config view --raw --minify --flatten > account-creation-user.kubeconfig
+for /f "delims=" %i in ('kubectl -n account-creation create token account-creation-user') do set TOKEN=%i
+
+kubectl --kubeconfig=account-creation-user.kubeconfig config set-credentials account-creation-user --token="%TOKEN%"
+kubectl --kubeconfig=account-creation-user.kubeconfig config set-context --current --user=account-creation-user --namespace=account-creation
 ```
+
+## Why this works
+
+- `kubectl config view --raw --minify --flatten` copies server + CA details from your current context.
+- Then the commands only inject ServiceAccount token and namespace/user.
+- This avoids `--certificate-authority-data`, which is unsupported in some `kubectl` versions.
 
 ## Validate permissions
 
