@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-disk-app-svc
+  namespace: azure-pvc
+spec:
+  selector:
+    app: azure-disk-app
+  ports:
+    - port: 80
+      targetPort: 80

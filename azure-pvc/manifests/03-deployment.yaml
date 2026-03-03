@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-disk-app
+  namespace: azure-pvc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azure-disk-app
+  template:
+    metadata:
+      labels:
+        app: azure-disk-app
+    spec:
+      containers:
+        - name: web
+          image: nginx:1.27
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: app-data
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: app-data
+          persistentVolumeClaim:
+            claimName: azure-disk-pvc
