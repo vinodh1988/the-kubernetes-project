@@ -1,0 +1,9 @@
+Criterion,Weight,A Raw (1-5),A Weighted,B Raw (1-5),B Weighted,C Raw (1-5),C Weighted,Notes
+Security policy depth,20,,,,,,,,
+Performance / latency,20,,,,,,,,
+Observability,15,,,,,,,,
+Operational simplicity,15,,,,,,,,
+Cloud/platform fit,15,,,,,,,,
+Portability,10,,,,,,,,
+Cost impact,5,,,,,,,,
+TOTAL,100,,,,,,,,

@@ -1,0 +1,9 @@
+Criterion,Weight,Cilium Raw (1-5),Cilium Weighted,Calico Raw (1-5),Calico Weighted,AWS VPC CNI Raw (1-5),AWS VPC CNI Weighted,Notes
+Security policy depth,20,5,20,5,20,3,12,Advanced policy breadth and control depth
+Performance / latency,20,5,20,4,16,4,16,Data path efficiency and tail latency behavior
+Observability,15,5,15,4,12,3,9,Flow visibility and troubleshooting depth
+Operational simplicity,15,3,9,4,12,5,15,Team familiarity and day-2 burden
+Cloud/platform fit,15,4,12,4,12,5,15,EKS-native alignment and governance integration
+Portability,10,5,10,5,10,1,2,Multi-cloud and hybrid flexibility
+Cost impact,5,3,3,4,4,5,5,People plus infra plus outage-risk cost
+TOTAL,100,,89,,86,,74,
