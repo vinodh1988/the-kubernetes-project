@@ -22,6 +22,20 @@ kubectl --kubeconfig=account-creation-user.kubeconfig auth can-i create deployme
 kubectl --kubeconfig=account-creation-user.kubeconfig auth can-i create deployment -n account-creation
 ```
 
+## Windows PowerShell quick path
+
+Use the helper script from this folder:
+
+```powershell
+.\generate-kubeconfig.ps1
+```
+
+Optional parameters:
+
+```powershell
+.\generate-kubeconfig.ps1 -Namespace account-creation -ServiceAccount account-creation-user -OutputFile account-creation-user.kubeconfig
+```
+
 ## Prerequisites
 
 - Namespace: `account-creation`

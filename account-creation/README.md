@@ -14,6 +14,8 @@ This project creates RBAC for a Kubernetes identity with these permissions:
 - `manifests/04-role-full-project-ns.yaml`
 - `manifests/05-rolebinding-full-project-ns.yaml`
 - `account-creation-user.kubeconfig.template`
+- `generate-kubeconfig.sh`
+- `generate-kubeconfig.ps1`
 
 ## 1) Create project namespace
 
@@ -59,7 +61,27 @@ kubectl -n account-creation create token account-creation-user
 
 Use this token in a kubeconfig/user context if needed.
 
-## 5) Create kubeconfig from template
+## 5) Generate kubeconfig automatically (recommended)
+
+Linux/macOS/Git Bash:
+
+```bash
+./generate-kubeconfig.sh
+```
+
+Windows PowerShell:
+
+```powershell
+.\generate-kubeconfig.ps1
+```
+
+Optional custom values:
+
+```powershell
+.\generate-kubeconfig.ps1 -Namespace account-creation -ServiceAccount account-creation-user -OutputFile account-creation-user.kubeconfig
+```
+
+## 6) Create kubeconfig from template (manual)
 
 Template file:
 
